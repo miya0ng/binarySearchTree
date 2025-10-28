@@ -1,6 +1,6 @@
 using System;
 
-public class VisualizableBST<TKey, TValue> : BinarySearchTree<TKey, TValue> where TKey : IComparable<TKey>
+public class VisualizableBST<TKey, TValue> : AVLTree<TKey, TValue> where TKey : IComparable<TKey>
 {
     public TreeNode<TKey, TValue> GetRoot()
     {

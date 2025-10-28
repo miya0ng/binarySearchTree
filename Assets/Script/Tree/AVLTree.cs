@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class AVLTree<TKey, TValue> : BinarySearchTree<TKey, TValue> where TKey : IComparable<TKey>
 {
@@ -11,78 +9,81 @@ public class AVLTree<TKey, TValue> : BinarySearchTree<TKey, TValue> where TKey :
 
     protected override TreeNode<TKey, TValue> Add(TreeNode<TKey, TValue> node, TKey key, TValue value)
     {
-        base.Add(node, key, value);
-
+        node = base.Add(node, key, value);
         return Balance(node);
     }
+
     protected override TreeNode<TKey, TValue> AddOrUpdate(TreeNode<TKey, TValue> node, TKey key, TValue value)
     {
-        base.AddOrUpdate(node, key, value);
-
+        node = base.AddOrUpdate(node, key, value);
         return Balance(node);
     }
+
     public override TreeNode<TKey, TValue> Remove(TreeNode<TKey, TValue> node, TKey key)
     {
         node = base.Remove(node, key);
-        if(node == null)
+        if (node == null)
         {
             return node;
         }
-
         return Balance(node);
     }
 
     protected int BalanceFactor(TreeNode<TKey, TValue> node)
     {
-        return node == null? 0: Height(node.Left) - Height(node.Right);
+        return node == null ? 0 : Height(node.Left) - Height(node.Right);
     }
 
     protected TreeNode<TKey, TValue> Balance(TreeNode<TKey, TValue> node)
     {
         int balanceFactor = BalanceFactor(node);
-        if(balanceFactor > 1)
+
+        if (balanceFactor > 1)
         {
-            if(BalanceFactor(node.Left) < 0)
+            if (BalanceFactor(node.Left) < 0)
             {
                 node.Left = RotateLeft(node.Left);
             }
             return RotateRight(node);
         }
 
-        if(balanceFactor < -1)
+        if (balanceFactor < -1)
         {
             if (BalanceFactor(node.Right) > 0)
             {
-                node.Right = RotateLeft(node.Right);
+                node.Right = RotateRight(node.Right);
             }
             return RotateLeft(node);
         }
 
-        return node; 
+        return node;
     }
 
     protected TreeNode<TKey, TValue> RotateRight(TreeNode<TKey, TValue> node)
     {
         var leftChild = node.Left;
-        var rightSubtreeOfLeftChild = node.Right;
+        var rightSubtreeOfLeftChild = leftChild.Right;
 
         leftChild.Right = node;
         node.Left = rightSubtreeOfLeftChild;
 
         UpdateHeight(node);
         UpdateHeight(leftChild);
+
         return leftChild;
     }
+
     protected TreeNode<TKey, TValue> RotateLeft(TreeNode<TKey, TValue> node)
     {
-        var RightChild = node.Right;
-        var rightSubtreeOfRightChild = node.Left;
+        var rightChild = node.Right;
+        var leftSubtreeOfRightChild = rightChild.Left;
 
-        RightChild.Right = node;
-        node.Right = rightSubtreeOfRightChild;
+        rightChild.Left = node;
+        node.Right = leftSubtreeOfRightChild;
 
         UpdateHeight(node);
-        UpdateHeight(RightChild);
-        return RightChild;
+        UpdateHeight(rightChild);
+
+        return rightChild;
     }
 }
