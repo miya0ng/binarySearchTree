@@ -1,12 +1,9 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class GraphNode
 {
     public int id;
     public int weight = 1;
-    //public List<GraphNode> neighbors;
 
     public List<GraphNode> adjacents = new List<GraphNode>();
 

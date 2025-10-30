@@ -1,3 +1,5 @@
+using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Graph
@@ -13,19 +15,21 @@ public class Graph
         cols = grid.GetLength(1);
 
         nodes = new GraphNode[grid.Length];
-        for (int i = 0; i < nodes.Length; i++)
+        for (int i = 0; i < nodes.Length; ++i)
         {
             nodes[i] = new GraphNode();
             nodes[i].id = i;
         }
 
-        for (int r = 0; r < cols; r++)
+        for (int r = 0; r < rows; ++r)
         {
-            for (int c = 0; c < rows; c++)
+            for (int c = 0; c < cols; ++c)
             {
                 int index = r * cols + c;
                 nodes[index].weight = grid[r, c];
-                if (grid[r, c] == -1) continue;
+
+                if (grid[r, c] == -1)
+                    continue;
 
                 if (r - 1 >= 0 && grid[r - 1, c] >= 0)
                 {
@@ -47,6 +51,15 @@ public class Graph
                     nodes[index].adjacents.Add(nodes[index - 1]);
                 }
             }
+        }
+
+    }
+
+    public void ResetNodePrevious()
+    {
+        foreach (var node in nodes)
+        {
+            node.previous = null;
         }
     }
 }

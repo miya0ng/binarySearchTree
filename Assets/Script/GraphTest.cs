@@ -1,81 +1,96 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 public class GraphTest : MonoBehaviour
 {
-    public UIGraphNode nodePrefab;
-    public List<UIGraphNode> uiNodes;
+    public enum Algorithm
+    {
+        DFS,
+        BFS,
+        DFSRecursive,
+        PathFindingBFS,
+        Dikjstra,
+        Astar,
+    }
+
+
+    public UiGraphNode nodePrefab;
+    public List<UiGraphNode> uiNodes;
 
     public Transform uiNodeRoot;
 
     private Graph graph;
 
-    public enum AlgorithmType
-    {
-        DFS,
-        BFS,
-        DFS_Recursive,
-        PathFindingBFS,
-    }
-
     private void Start()
     {
         int[,] map = new int[10, 10]
         {
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,-1,1,-1,1,1,1,1,1,1 },
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,-1,1,1,1,1,1,1,1,1 },
-            {1,1,1,1,1,1,1,1,1,1 },
-            {1,1,1,1,1,1,-1,1,1,1 },
-            {1,1,1,1,1,1,-1,1,1,1 }
-        };
+            { 1, -1, 1, 3, 1, 1, -1, 1, 1, 1  },
+            { 1, -1, 1, 3, 1, 1, 1, 5, 1, 1  },
+            { 1, -1, 1, 3, 1, 1,1, 1, 1, 1  },
+            { 1, -1, 1, 3, 1, 1, 1, 1, 1, 1  },
+            { 1, -1, 1, 3, 1, 1, 10, 1, 1, 1  },
+            { 1, -1, 1, 7, 1, 1, 9, 1, 1, 1  },
+            { 1, 1, 1, 7, 7, 1, 10, 1, 1, 1  },
+            { 1, 1, 1, 1, 1, 1, -1, 1, 1, 1  },
+            { 1, 1, 1, 1, 1, 1, -1, 1, 1, 1  },
+            { 1, 1, 1, 1, 1, 1, -1, 1, 1, 1  },
 
+        };
         graph = new Graph();
         graph.Init(map);
-        InitUINodes(graph);
+        InitUiNodes(graph);
     }
 
-    public AlgorithmType algorithmType;
+    public Algorithm algorithm;
     public int startIndex;
     public int endIndex;
+
 
     [ContextMenu("Search")]
     public void Search()
     {
         var search = new GraphSearch();
         search.Init(graph);
-        switch (algorithmType)
+
+        switch (algorithm)
         {
-            case AlgorithmType.DFS:
+            case Algorithm.DFS:
                 search.DFS(graph.nodes[startIndex]);
                 break;
-            case AlgorithmType.BFS:
+            case Algorithm.BFS:
                 search.BFS(graph.nodes[startIndex]);
                 break;
-            case AlgorithmType.DFS_Recursive:
-                search.DFS_Recursive(graph.nodes[startIndex]);
+            case Algorithm.DFSRecursive:
+                search.DFSRecursive(graph.nodes[startIndex]);
                 break;
-            case AlgorithmType.PathFindingBFS:
+            case Algorithm.PathFindingBFS:
                 search.PathFindingBFS(graph.nodes[startIndex], graph.nodes[endIndex]);
                 break;
+            case Algorithm.Dikjstra:
+                search.Dikjstra(graph.nodes[startIndex], graph.nodes[endIndex]);
+                break;
+            case Algorithm.Astar:
+                search.Astar(graph.nodes[startIndex], graph.nodes[endIndex]);
+                break;
         }
-        ResetUINodes();
-        Debug.Log(search.path.Count);
-        for (int i = 0; i < search.path.Count; i++)
+        
+        
+        ResetUiNodes();
+
+        for (int i = 0; i < search.path.Count; ++i)
         {
             var node = search.path[i];
-            var uiNode = uiNodes[node.id];
-            uiNode.SetColor(Color.Lerp(Color.red, Color.green, (float)i / search.path.Count));
-            uiNode.SetText($"ID: {node.id.ToString()} \nWeight: {node.weight} \nPath: {i}");
+            var color = Color.Lerp(Color.red, Color.green, (float)i / (search.path.Count - 1));
+            uiNodes[node.id].SetColor(color);
+            uiNodes[node.id].SetText($"ID: {node.id}\nWeight: {node.weight}\nPath: {i}");
         }
     }
 
-    private void InitUINodes(Graph graph)
+    private void InitUiNodes(Graph graph)
     {
-        uiNodes = new List<UIGraphNode>();
         foreach (var node in graph.nodes)
         {
             var uiNode = Instantiate(nodePrefab, uiNodeRoot);
@@ -85,11 +100,12 @@ public class GraphTest : MonoBehaviour
         }
     }
 
-    private void ResetUINodes()
+    private void ResetUiNodes()
     {
         foreach (var uiNode in uiNodes)
         {
             uiNode.Reset();
         }
+
     }
 }

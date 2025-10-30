@@ -719,7 +719,7 @@ MonoBehaviour:
   nodePrefab: {fileID: 196343827297549626, guid: f91b0f30c46dc9141b04dca702f42eb2, type: 3}
   uiNodes: []
   uiNodeRoot: {fileID: 454928915}
-  algorithmType: 2
+  algorithm: 4
   startIndex: 0
   endIndex: 0
 --- !u!1 &2070640363

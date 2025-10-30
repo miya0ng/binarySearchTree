@@ -1,7 +1,9 @@
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
-public class UIGraphNode : MonoBehaviour
+
+public class UiGraphNode : MonoBehaviour
 {
     public Image image;
     public TextMeshProUGUI text;
@@ -11,8 +13,9 @@ public class UIGraphNode : MonoBehaviour
     public void Reset()
     {
         SetColor(node.CanVisit ? Color.white : Color.gray);
-        SetText($"ID: {node.id} \n weight: {node.weight}");
+        SetText($"ID: {node.id}\nWeight: {node.weight}");
     }
+
     public void SetNode(GraphNode node)
     {
         this.node = node;
