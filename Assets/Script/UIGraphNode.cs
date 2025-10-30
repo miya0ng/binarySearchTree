@@ -13,7 +13,7 @@ public class UiGraphNode : MonoBehaviour
     public void Reset()
     {
         SetColor(node.CanVisit ? Color.white : Color.gray);
-        SetText($"ID: {node.id}\nWeight: {node.weight}");
+        SetText($"ID: {node.id}\nWeight: {node.weight}\nD: {node.distance}");
     }
 
     public void SetNode(GraphNode node)
