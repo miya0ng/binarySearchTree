@@ -58,6 +58,14 @@ public class GraphSearch
             }
         }
     }
+
+    public void DFS_Recursive(GraphNode node)
+    {
+        path.Clear();
+        var visited = new HashSet<GraphNode>();
+        DFS_Recursive(node, visited);
+    }
+
     public void DFS_Recursive(GraphNode node, HashSet<GraphNode> visited)
     {
         if (!node.CanVisit) return;
@@ -73,51 +81,42 @@ public class GraphSearch
     }
     public void PathFindingBFS(GraphNode start, GraphNode target)
     {
-        path.Clear();
-        //graph.ResetNodePrevious();
-        bool success = false;
-        if (!start.CanVisit) return;
-        var parent = new List<GraphNode>();
         var visited = new HashSet<GraphNode>();
         var queue = new Queue<GraphNode>();
+        var parentMap = new Dictionary<GraphNode, GraphNode>();
+        visited.Add(start);
 
-        var child = start;
-        parent.Add(child);
-        path.Add(start);
         queue.Enqueue(start);
-
+        bool found = false;
         while (queue.Count > 0)
         {
-            var currentNode = queue.Dequeue();
-            if (currentNode == target)
+            var current = queue.Dequeue();
+            if (current == target)
             {
-                success = true;
+                found = true;
                 break;
             }
-            foreach (var neighbor in start.adjacents)
+
+            foreach (var neighbor in current.adjacents)
             {
-
-
                 if (neighbor == null || !neighbor.CanVisit) continue;
-                visited.Add(start);
+                if (visited.Contains(neighbor)) continue;
+
+                visited.Add(neighbor);
+                parentMap[neighbor] = current;
                 queue.Enqueue(neighbor);
-                parent.Add(neighbor.previous);
             }
         }
-
-        if(!success)
+        path.Clear();
+        if (found)
         {
-            return false;
+            var current = target;
+            while (current != null)
+            {
+                path.Add(current);
+                parentMap.TryGetValue(current, out current);
+            }
+            path.Reverse();
         }
-
-        GraphNode step = target;
-        while(step != null)
-        {
-            path.Add(step);
-            step = step.previous;
-        }
-
-        path.Reverse();
-        return true;
     }
 }

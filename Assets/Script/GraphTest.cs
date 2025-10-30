@@ -56,7 +56,7 @@ public class GraphTest : MonoBehaviour
                 search.BFS(graph.nodes[startIndex]);
                 break;
             case AlgorithmType.DFS_Recursive:
-                search.DFS_Recursive(graph.nodes[startIndex], new HashSet<GraphNode>());
+                search.DFS_Recursive(graph.nodes[startIndex]);
                 break;
             case AlgorithmType.PathFindingBFS:
                 search.PathFindingBFS(graph.nodes[startIndex], graph.nodes[endIndex]);
