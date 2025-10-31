@@ -6,7 +6,7 @@ using System.Linq;
 public enum ProbingStrategy
 {
     Linear,
-    Quadracic,
+    Quadratic,
     DoubleHash,
 }
 public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
@@ -19,9 +19,7 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
     private bool[] deleted;
     private int size;
     private int count;
-
     private ProbingStrategy probingStrategy;
-
 
     public OpenAddressingHashTable(ProbingStrategy strategy = ProbingStrategy.Linear)
     {
@@ -45,21 +43,28 @@ public class OpenAddressingHashTable<TKey, TValue> : IDictionary<TKey, TValue>
 
     public int GetSecondaryHash(TKey key)
     {
-        throw new NotImplementedException();
+        if (key == null)
+            throw new ArgumentNullException(nameof(key));
+
+        int hash1 = GetPrimaryHash(key);
+        int hash2 = hash1 - (Math.Abs(hash1) % hash1);
+
+        return hash2;
     }
 
     public int GetProbeIndex(TKey key, int attempt)
     {
         int primaryHash = GetPrimaryHash(key);
+        int secondaryHash = GetSecondaryHash(key);
 
         switch (probingStrategy)
         {
             case ProbingStrategy.Linear:
                 return (primaryHash + attempt) % size;
-            case ProbingStrategy.Quadracic:
+            case ProbingStrategy.Quadratic:
                 return (primaryHash + attempt * attempt) % size;
             case ProbingStrategy.DoubleHash:
-                throw new NotImplementedException();
+                return (primaryHash + attempt * secondaryHash) % size;
         }
 
         throw new ArgumentException(nameof(probingStrategy));
