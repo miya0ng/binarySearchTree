@@ -141,8 +141,9 @@ public class GraphSearch
         }
 
         distances[start.id] = start.weight;
+        start.distance = distances[start.id];
         pQueue.Enqueue(start, distances[start.id]);
-
+        
         bool success = false;
         while (pQueue.Count > 0)
         {
@@ -164,10 +165,13 @@ public class GraphSearch
                     continue;
 
                 var newDistance = distances[currentNode.id] + adjacent.weight;
+
+                Debug.Log($"  consider {adjacent.id} from {currentNode.id}  weight:{adjacent.weight}  newDist:{newDistance}  oldDist:{distances[adjacent.id]}");
                 if (distances[adjacent.id] > newDistance)
                 {
                     distances[adjacent.id] = newDistance;
                     adjacent.previous = currentNode;
+                    adjacent.distance = newDistance;
                     pQueue.Enqueue(adjacent, newDistance);
                 }
             }

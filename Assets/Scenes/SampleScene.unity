@@ -713,10 +713,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1490745914}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cb766c1a01c4f54bb4cd87ce5baa7d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 815591729f6246245a5f168a7f7d3294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodePrefab: {fileID: 196343827297549626, guid: f91b0f30c46dc9141b04dca702f42eb2, type: 3}
+  nodePrefab: {fileID: 437237584874822695, guid: f91b0f30c46dc9141b04dca702f42eb2, type: 3}
   uiNodes: []
   uiNodeRoot: {fileID: 454928915}
   algorithm: 4

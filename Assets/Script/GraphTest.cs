@@ -85,7 +85,7 @@ public class GraphTest : MonoBehaviour
             var node = search.path[i];
             var color = Color.Lerp(Color.red, Color.green, (float)i / (search.path.Count - 1));
             uiNodes[node.id].SetColor(color);
-            uiNodes[node.id].SetText($"ID: {node.id}\nWeight: {node.weight}\nPath: {i}");
+            uiNodes[node.id].SetText($"ID: {node.id}\nWeight: {node.weight}\nD: {node.distance}\nPath: {i}");
         }
     }
 
