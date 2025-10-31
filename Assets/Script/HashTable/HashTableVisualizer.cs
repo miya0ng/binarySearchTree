@@ -51,7 +51,7 @@ public class HashTableVisualizer : MonoBehaviour
             return;
         }
 
-        // ChaningHashTableì˜ ë‚´ë¶€ bucketsì— ì ‘ê·¼í•˜ê¸° ìœ„í•´ ë¦¬í”Œë ‰ì…˜ ì‚¬ìš©
+        // ChaningHashTableÀÇ ³»ºÎ buckets¿¡ Á¢±ÙÇÏ±â À§ÇØ ¸®ÇÃ·º¼Ç »ç¿ë
         var bucketsField = typeof(ChaningHashTable<TKey, TValue>).GetField("buckets",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
@@ -82,7 +82,7 @@ public class HashTableVisualizer : MonoBehaviour
             return;
         }
 
-        // OpenAddressingHashTableì˜ ë‚´ë¶€ tableì— ì ‘ê·¼
+        // OpenAddressingHashTableÀÇ ³»ºÎ table¿¡ Á¢±Ù
         var tableField = typeof(OpenAddressingHashTable<TKey, TValue>).GetField("table",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
@@ -111,18 +111,18 @@ public class HashTableVisualizer : MonoBehaviour
 
             if (bucket == null || bucket.Count == 0)
             {
-                // ë¹ˆ ë²„í‚·
+                // ºó ¹öÅ¶
                 CreateNodeUI(i, "Empty", "Empty", emptyBucketColor);
             }
             else if (bucket.Count == 1)
             {
-                // ë‹¨ì¼ í•­ëª©
+                // ´ÜÀÏ Ç×¸ñ
                 var kvp = bucket.First.Value;
                 CreateNodeUI(i, kvp.Key.ToString(), kvp.Value.ToString(), occupiedBucketColor);
             }
             else
             {
-                // ì¶©ëŒì´ ìˆëŠ” ë²„í‚· - ì²´ì´ë‹ìœ¼ë¡œ ì—¬ëŸ¬ í•­ëª©
+                // Ãæµ¹ÀÌ ÀÖ´Â ¹öÅ¶ - Ã¼ÀÌ´×À¸·Î ¿©·¯ Ç×¸ñ
                 foreach (var kvp in bucket)
                 {
                     CreateNodeUI(i, kvp.Key.ToString(), kvp.Value.ToString(), collisionBucketColor);
@@ -144,7 +144,7 @@ public class HashTableVisualizer : MonoBehaviour
         {
             if (occupied != null && !occupied[i])
             {
-                // ë¹ˆ ìŠ¬ë¡¯
+                // ºó ½½·Ô
                 CreateNodeUI(i, "Empty", "Empty", emptyBucketColor);
             }
             else
@@ -183,11 +183,23 @@ public class HashTableVisualizer : MonoBehaviour
         float totalHeight = nodeObjects.Count * (nodeHeight + nodeSpacing) + nodeSpacing;
         contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, totalHeight);
 
-        // LayoutGroupì´ ìˆë‹¤ë©´ ë ˆì´ì•„ì›ƒ ì¬ê³„ì‚°
+        // LayoutGroupÀÌ ÀÖ´Ù¸é ·¹ÀÌ¾Æ¿ô Àç°è»ê
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
     }
 
-    // í…ŒìŠ¤íŠ¸ìš© ë©”ì„œë“œë“¤
+    // Å×½ºÆ®¿ë ¸Ş¼­µåµé
+    public void OnTableOptions(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                TestOpenAddressingHashTable();
+                break;
+            case 1:
+                TestChainingHashTable();
+                break;
+        }
+    }
     public void TestChainingHashTable()
     {
         var hashTable = new ChaningHashTable<string, int>();
@@ -212,3 +224,4 @@ public class HashTableVisualizer : MonoBehaviour
         VisualizeOpenAddressingHashTable(hashTable);
     }
 }
+
