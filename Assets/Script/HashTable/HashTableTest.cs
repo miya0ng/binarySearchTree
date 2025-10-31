@@ -6,7 +6,7 @@ public class HashTableTest : MonoBehaviour
 {
     private void Start()
     {
-        var hashTable = new SimpleHashTable<string, int>();
+        var hashTable = new ChaningHashTable<string, int>();
 
         hashTable.Add("one", 1);
         hashTable.Add("two", 2);
